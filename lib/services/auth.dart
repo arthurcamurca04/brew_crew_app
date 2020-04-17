@@ -1,6 +1,8 @@
 import 'package:brew_crew/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'database.dart';
+
 //defining methods which is gonna be used in interaction with firebase_auth
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -52,6 +54,10 @@ class AuthService {
       );
 
       FirebaseUser user = result.user;
+
+      //create a new document for the user with the uid 
+      await DatabaseService(uid: user.uid)
+        .updateUserData('0', 'Novo membro', 100);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

@@ -1,4 +1,5 @@
 //import 'package:brew_crew/services/auth.dart';
+import 'package:brew_crew/components/loading.dart';
 import 'package:brew_crew/components/textInputDecoration.dart';
 import 'package:brew_crew/screens/auth/register.dart';
 import 'package:brew_crew/services/auth.dart';
@@ -11,30 +12,32 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _auth = new AuthService();
-   final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = '';
   String error = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         actions: <Widget>[
           FlatButton.icon(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Register(),
-                  ),
-                );
-              },
-              label: Text('Registrar'),
-              icon: Icon(Icons.person),
-          )],
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Register(),
+                ),
+              );
+            },
+            label: Text('Registrar'),
+            icon: Icon(Icons.person),
+          )
+        ],
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         title: Text("Fazer login"),
@@ -62,7 +65,7 @@ class _SignInState extends State<SignIn> {
                 height: 10.0,
               ),
               TextFormField(
-                 validator: (value) => value.length < 6
+                validator: (value) => value.length < 6
                     ? 'Senha precisa ter mais de 6 caracteres'
                     : null,
                 onChanged: (value) {
@@ -81,22 +84,23 @@ class _SignInState extends State<SignIn> {
                 ),
                 color: Colors.pink[400],
                 textColor: Colors.white,
-                onPressed: () async{
-                   if (_formKey.currentState.validate()) {
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
+                    setState(() => loading = true);
                     dynamic result = await _auth.signIn(email, password);
                     if (result == null) {
                       setState(() {
                         error = 'Por favor, informe um email válido';
+                        loading = false;
                       });
                     } else {
-                      print('Usuário logado');
-                      
+                      print(result);
                     }
                   }
                 },
                 child: Text("Entrar"),
               ),
-               SizedBox(
+              SizedBox(
                 height: 6,
               ),
               Text(

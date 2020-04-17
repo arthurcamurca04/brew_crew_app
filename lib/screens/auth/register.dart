@@ -1,5 +1,7 @@
+import 'package:brew_crew/components/loading.dart';
 import 'package:brew_crew/components/textInputDecoration.dart';
 import 'package:brew_crew/screens/auth/sign_in.dart';
+import 'package:brew_crew/screens/wrapper.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +18,11 @@ class _RegisterState extends State<Register> {
   String email = '';
   String password = '';
   String error = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         actions: <Widget>[
@@ -84,13 +87,20 @@ class _RegisterState extends State<Register> {
                 textColor: Colors.white,
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    setState(() => loading= true);
                     dynamic result = await _auth.registerUser(email, password);
                     if (result == null) {
                       setState(() {
                         error = 'Por favor, informe um email válido';
+                        loading = false;
                       });
-                    } else {
-                      print('Usuário registrado');
+                    }else{
+                      print(result);
+                      Navigator.pushReplacement(context, 
+                      MaterialPageRoute(
+                        builder: (context){
+                          return Wrapper();
+                        }),);
                     }
                   }
                 },
