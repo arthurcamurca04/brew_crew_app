@@ -11,6 +11,21 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _showSettingsPanel() {
+      showModalBottomSheet(
+        context: context,
+        builder: (_){
+          return Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 60,
+              vertical: 20,
+            ),
+            child: Text('Bottom sheet'),
+          );
+        },
+      );
+    }
+
     return StreamProvider<List<Brew>>.value(
       value: DatabaseService().brews,
       child: Scaffold(
@@ -26,7 +41,14 @@ class HomeScreen extends StatelessWidget {
               },
               icon: Icon(Icons.person),
               label: Text('Sign out'),
-            )
+            ),
+            FlatButton.icon(
+              onPressed: () {
+                _showSettingsPanel();
+              },
+              icon: Icon(Icons.settings),
+              label: Text('Settings'),
+            ),
           ],
         ),
         body: BrewList(),
