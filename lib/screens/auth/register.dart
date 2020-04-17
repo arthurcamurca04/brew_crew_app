@@ -1,3 +1,4 @@
+import 'package:brew_crew/components/textInputDecoration.dart';
 import 'package:brew_crew/screens/auth/sign_in.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -56,10 +57,10 @@ class _RegisterState extends State<Register> {
                 onChanged: (value) {
                   setState(() => email = value);
                 },
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: textFieldDecoration('Email'),
               ),
               SizedBox(
-                height: 20.0,
+                height: 10.0,
               ),
               TextFormField(
                 validator: (value) => value.length < 6
@@ -69,16 +70,14 @@ class _RegisterState extends State<Register> {
                   setState(() => password = value);
                 },
                 obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Senha',
-                ),
+                decoration: textFieldDecoration('Senha'),
               ),
               SizedBox(
-                height: 20.0,
+                height: 10.0,
               ),
               RaisedButton(
                 padding: EdgeInsets.symmetric(
-                  vertical: 15.0,
+                  vertical: 10.0,
                   horizontal: 40.0,
                 ),
                 color: Colors.pink[400],
@@ -98,7 +97,7 @@ class _RegisterState extends State<Register> {
                 child: Text("Registrar"),
               ),
               SizedBox(
-                height: 12,
+                height: 6,
               ),
               Text(
                 error,

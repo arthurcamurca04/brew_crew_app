@@ -1,5 +1,4 @@
-import 'package:brew_crew/screens/auth/register.dart';
-//import 'package:brew_crew/screens/auth/sign_in.dart';
+import 'package:brew_crew/screens/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationScreen extends StatefulWidget {
@@ -11,7 +10,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Register(),
+      child: SignIn(),
     );
   }
 }
