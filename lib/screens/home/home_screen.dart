@@ -12,11 +12,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     void _showSettingsPanel() {
       showModalBottomSheet(
         context: context,
-        builder: (_){
+        builder: (_) {
           return Container(
             padding: EdgeInsets.symmetric(
               horizontal: 60,
@@ -53,7 +52,16 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: BrewList(),
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage(
+              'assets/images/coffee_bg.png',
+            ),
+            fit: BoxFit.cover
+          )),
+          child: BrewList(),
+        ),
       ),
     );
   }
