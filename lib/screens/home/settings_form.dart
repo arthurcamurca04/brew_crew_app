@@ -51,6 +51,16 @@ class _SettingsFormState extends State<SettingsForm> {
           ),
           //slider
 
+          Slider(
+            activeColor: Colors.brown[_currentStrength ?? 100],
+            inactiveColor: Colors.brown[_currentStrength ?? 100 ],
+            min: 100,
+            max: 900,
+            divisions: 8,
+            value: (_currentStrength ?? 100).toDouble(),
+            onChanged: (val) => setState(() => _currentStrength = val.truncate()),
+          ),
+
           RaisedButton(
             onPressed: () async {
               print(_currentName);
@@ -62,7 +72,7 @@ class _SettingsFormState extends State<SettingsForm> {
               'Salvar',
               style: TextStyle(color: Colors.white),
             ),
-          )
+          ),
         ],
       ),
     );
