@@ -1,5 +1,10 @@
+import 'package:brew_crew/components/loading.dart';
 import 'package:brew_crew/components/textInputDecoration.dart';
+import 'package:brew_crew/models/user.dart';
+import 'package:brew_crew/models/userdata.dart';
+import 'package:brew_crew/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsForm extends StatefulWidget {
   @override
@@ -16,65 +21,81 @@ class _SettingsFormState extends State<SettingsForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          Text(
-            'Configurações',
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            decoration: textFieldDecoration('Nome'),
-            validator: (val) => val.isEmpty ? 'Digite um nome' : null,
-            onChanged: (val) => setState(() => _currentName = val),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          //dropdown
-          DropdownButtonFormField(
-            decoration: textFieldDecoration(''),
-            value: _currentSugars ?? '0',
-            items: sugars.map((sugar){
-              return DropdownMenuItem(
-                child: Text('$sugar sugars'),
-                value: sugar,
-              );
-            }).toList(),
-            onChanged: (val) => setState(() => _currentSugars = val),
-          ),
-          //slider
+    final user = Provider.of<User>(context);
 
-          Slider(
-            activeColor: Colors.brown[_currentStrength ?? 100],
-            inactiveColor: Colors.brown[_currentStrength ?? 100 ],
-            min: 100,
-            max: 900,
-            divisions: 8,
-            value: (_currentStrength ?? 100).toDouble(),
-            onChanged: (val) => setState(() => _currentStrength = val.truncate()),
-          ),
+    return StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserData userData = snapshot.data;
 
-          RaisedButton(
-            onPressed: () async {
-              print(_currentName);
-              print(_currentSugars);
-              print(_currentStrength);
-            },
-            color: Colors.pink[400],
-            child: Text(
-              'Salvar',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Configurações',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    initialValue: userData.name,
+                    decoration: textFieldDecoration(''),
+                    validator: (val) => val.isEmpty ? 'Digite um nome' : null,
+                    onChanged: (val) => setState(() => _currentName = val),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  //dropdown
+                  DropdownButtonFormField(
+                    decoration: textFieldDecoration(''),
+                    value: _currentSugars ?? userData.sugars,
+                    items: sugars.map((sugar) {
+                      return DropdownMenuItem(
+                        child: Text('$sugar sugars'),
+                        value: sugar,
+                      );
+                    }).toList(),
+                    onChanged: (val) => setState(() => _currentSugars = val),
+                  ),
+                  //slider
+
+                  Slider(
+                    activeColor:
+                        Colors.brown[_currentStrength ?? userData.strength],
+                    inactiveColor:
+                        Colors.brown[_currentStrength ?? userData.strength],
+                    min: 100,
+                    max: 900,
+                    divisions: 8,
+                    value: (_currentStrength ?? userData.strength).toDouble(),
+                    onChanged: (val) =>
+                        setState(() => _currentStrength = val.truncate()),
+                  ),
+
+                  RaisedButton(
+                    onPressed: () async {
+                      print(_currentName);
+                      print(_currentSugars);
+                      print(_currentStrength);
+                    },
+                    color: Colors.pink[400],
+                    child: Text(
+                      'Salvar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Loading();
+          }
+        });
   }
 }
