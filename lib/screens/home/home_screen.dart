@@ -1,4 +1,5 @@
 import 'package:brew_crew/models/brew.dart';
+import 'package:brew_crew/screens/home/settings_form.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/services/database.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     void _showSettingsPanel() {
       showModalBottomSheet(
         context: context,
@@ -20,7 +22,7 @@ class HomeScreen extends StatelessWidget {
               horizontal: 60,
               vertical: 20,
             ),
-            child: Text('Bottom sheet'),
+            child: SettingsForm(),
           );
         },
       );
@@ -40,14 +42,14 @@ class HomeScreen extends StatelessWidget {
                 await _auth.signOut();
               },
               icon: Icon(Icons.person),
-              label: Text('Sign out'),
+              label: Text('Sair'),
             ),
             FlatButton.icon(
               onPressed: () {
                 _showSettingsPanel();
               },
               icon: Icon(Icons.settings),
-              label: Text('Settings'),
+              label: Text('Configurações'),
             ),
           ],
         ),
